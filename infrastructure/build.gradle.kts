@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace = "com.jhoglas.infracstructure"
+    namespace = "com.jhoglas.infrastructure"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.jhoglas.infracstructure"
+        applicationId = "com.jhoglas.infrastructure"
         minSdk = 29
         targetSdk = 34
         versionCode = 1
@@ -43,4 +43,7 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+
+    //Koin
+    implementation(libs.koin.androidx.compose)
 }

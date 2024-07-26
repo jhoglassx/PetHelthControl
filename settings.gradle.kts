@@ -23,4 +23,4 @@ rootProject.name = "PetHelthControl"
 include(":app")
 include(":domain")
 include(":data")
-include(":infracstructure")
+include(":infrastructure")

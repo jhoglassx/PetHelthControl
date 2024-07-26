@@ -1,4 +1,4 @@
-package com.jhoglas.infracstructure
+package com.jhoglas.infrastructure
 
 import org.junit.Test
 
