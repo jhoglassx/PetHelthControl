@@ -2,6 +2,7 @@ package com.jhoglas.pethelthcontrol
 
 import android.app.Application
 import com.jhoglas.domain.di.domainModule
+//import com.jhoglas.domain.di.domainModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.loadKoinModules

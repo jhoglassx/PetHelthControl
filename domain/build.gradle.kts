@@ -1,5 +1,5 @@
 plugins {
-    alias(libs.plugins.android.application)
+    alias(libs.plugins.android.library)
     alias(libs.plugins.jetbrains.kotlin.android)
 }
 
@@ -8,13 +8,10 @@ android {
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.jhoglas.domain"
         minSdk = 29
-        targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles("consumer-rules.pro")
     }
 
     buildTypes {
@@ -46,5 +43,4 @@ dependencies {
 
     //Koin
     implementation(libs.koin.androidx.compose)
-
 }

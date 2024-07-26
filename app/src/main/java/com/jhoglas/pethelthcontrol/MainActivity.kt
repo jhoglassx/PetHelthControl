@@ -14,7 +14,6 @@ import com.jhoglas.pethelthcontrol.navigation.RegisterNavigation
 import com.jhoglas.pethelthcontrol.ui.home.HomeScreen
 import com.jhoglas.pethelthcontrol.ui.register.RegisterScreen
 import com.jhoglas.pethelthcontrol.ui.theme.PetHelthControlTheme
-import org.koin.core.context.KoinContext
 
 
 class MainActivity : ComponentActivity() {
