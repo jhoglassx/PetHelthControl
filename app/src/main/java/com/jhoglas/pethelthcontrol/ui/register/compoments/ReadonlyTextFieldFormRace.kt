@@ -9,15 +9,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import com.jhoglas.domain.entity.RaceEntity
-import com.jhoglas.pethelthcontrol.ui.register.model.RegisterAction
 import com.jhoglas.pethelthcontrol.ui.register.model.RegisterState
 
 
 @Composable
 fun ReadonlyTextFieldFormRace(
-    label: String,
-    bottomSheetTitle: String,
-    uiState: RegisterState,
+    uiState: RegisterState
 ){
     var showBottomSheet by remember { mutableStateOf(false) }
     var valueSelected by remember { mutableStateOf<RaceEntity?>(null) }
@@ -32,7 +29,7 @@ fun ReadonlyTextFieldFormRace(
         },
         label = {
             Text(
-                text = label,
+                text = "Race",
             )
         },
         isLoading = uiState.isLoading
@@ -41,7 +38,7 @@ fun ReadonlyTextFieldFormRace(
 
     if(showBottomSheet && uiState.isLoading.not()){
         SelectionBottomSheetRace(
-            title = bottomSheetTitle,
+            title = "Select Race",
             list = uiState.races,
             valueSelected = {
                 valueSelected = it
@@ -55,8 +52,6 @@ fun ReadonlyTextFieldFormRace(
 @Composable
 fun ReadonlyTextFieldFormRacePreview() {
     ReadonlyTextFieldFormRace(
-        label = "Raça",
-        bottomSheetTitle = "Selecione a raça do seu pet",
         uiState = RegisterState(
             isLoading = false,
             races = listOf(

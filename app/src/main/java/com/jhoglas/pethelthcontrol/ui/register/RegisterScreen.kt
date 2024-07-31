@@ -1,6 +1,5 @@
 package com.jhoglas.pethelthcontrol.ui.register
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -12,9 +11,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Face
 import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -24,11 +22,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
+import com.jhoglas.pethelthcontrol.ui.register.compoments.PetImage
 import com.jhoglas.pethelthcontrol.ui.register.compoments.ReadonlyTextFieldFormGender
 import com.jhoglas.pethelthcontrol.ui.register.compoments.ReadonlyTextFieldFormRace
 import com.jhoglas.pethelthcontrol.ui.register.compoments.RegisterTopBar
@@ -77,7 +75,6 @@ fun RegisterContent(
         modifier =
         Modifier
             .padding(4.dp)
-            .fillMaxSize(),
     ) {
         Row(
             modifier = Modifier
@@ -94,12 +91,9 @@ fun RegisterContent(
                         .background(Color.Black),
                     contentAlignment = Alignment.TopStart
                 ) {
-                    Image(
-                        imageVector = Icons.Filled.Face,
-                        modifier = Modifier
-                            .fillMaxSize(),
-                        contentDescription = "Pet Picture",
-                        colorFilter = ColorFilter.tint(Color.White),
+                    PetImage(
+                        img = "https://petshopdamadre.com.br/wp-content/uploads/2022/11/123.jpg",
+                        isLoading = uiState.isLoading
                     )
                 }
             }
@@ -147,8 +141,6 @@ fun RegisterContent(
                     .weight(1f)
             ) {
                 ReadonlyTextFieldFormGender(
-                    label = "Gender: ",
-                    bottomSheetTitle = "Gender: ",
                     uiState = uiState
                 )
             }
@@ -158,8 +150,6 @@ fun RegisterContent(
                     .weight(1f),
             ){
                 ReadonlyTextFieldFormRace(
-                    label = "Race: ",
-                    bottomSheetTitle = "Race: ",
                     uiState = uiState
                 )
             }
@@ -228,11 +218,13 @@ fun RegisterContent(
         ) {
             Button(
                 onClick = {},
-                modifier = Modifier
-                    .fillMaxWidth(0.5f)
-                    .padding(8.dp)
+                shape = MaterialTheme.shapes.small
             ){
-                Text(text = "Save")
+                Text(
+                    modifier = Modifier
+                        .padding(4.dp),
+                    text = "Save"
+                )
             }
         }
     }

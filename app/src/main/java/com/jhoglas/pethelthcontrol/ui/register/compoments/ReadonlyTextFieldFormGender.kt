@@ -15,9 +15,7 @@ import com.jhoglas.pethelthcontrol.ui.register.model.RegisterState
 
 @Composable
 fun ReadonlyTextFieldFormGender(
-    label: String,
-    bottomSheetTitle: String,
-    uiState: RegisterState,
+    uiState: RegisterState
 ){
     var showBottomSheet by remember { mutableStateOf(false) }
     var valueSelected by remember { mutableStateOf<GenderEntity?>(null) }
@@ -32,7 +30,7 @@ fun ReadonlyTextFieldFormGender(
         },
         label = {
             Text(
-                text = label
+                text = "Gender",
             )
         },
         isLoading = uiState.isLoading
@@ -40,7 +38,7 @@ fun ReadonlyTextFieldFormGender(
 
     if(showBottomSheet && uiState.isLoading.not()){
         SelectionBottomSheetGender(
-            title = bottomSheetTitle,
+            title = "Select Gender",
             list = uiState.genders,
             valueSelected = {
                 valueSelected = it
@@ -54,8 +52,6 @@ fun ReadonlyTextFieldFormGender(
 @Composable
 fun ReadonlyTextFieldFormGenderPreview() {
     ReadonlyTextFieldFormGender(
-        label = "Gênero",
-        bottomSheetTitle = "Selecione o gênero do seu pet",
         uiState = RegisterState(
             isLoading = false,
             genders = listOf(

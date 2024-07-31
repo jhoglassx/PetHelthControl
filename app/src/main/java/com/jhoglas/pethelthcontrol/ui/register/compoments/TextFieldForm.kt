@@ -1,11 +1,8 @@
 package com.jhoglas.pethelthcontrol.ui.register.compoments
 
 import MaskVisualTransformation
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -15,7 +12,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
-import com.jhoglas.pethelthcontrol.ui.ext.shimmerEffect
+import androidx.compose.ui.text.input.VisualTransformation
 
 @Composable
 fun TextFieldForm(
@@ -26,11 +23,7 @@ fun TextFieldForm(
 ) {
     var text by remember { mutableStateOf("") }
     if(isLoading){
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .shimmerEffect()
-        )
+        Loading()
     } else {
         TextField(
             modifier =
@@ -42,16 +35,14 @@ fun TextFieldForm(
                 )
             },
             value = text,
-            placeholder = {
-                Text(
-                    text = placeholder ?: "",
-                )
-            },
             onValueChange = {
                 text = it
             },
             maxLines = 1,
             readOnly = readOnly,
+            visualTransformation = if (text.isEmpty() && placeholder != null)
+                PlaceholderTransformation(placeholder)
+            else VisualTransformation.None,
         )
     }
 }
@@ -68,11 +59,7 @@ fun TextFieldFormDate(
     val pattern = remember { Regex("^\\d+\$") }
 
     if(isLoading){
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .shimmerEffect()
-        )
+        Loading()
     } else {
         TextField(
             modifier =
@@ -97,7 +84,9 @@ fun TextFieldFormDate(
             singleLine = true,
             readOnly = readOnly,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-            visualTransformation = MaskVisualTransformation("##/##/####"),
+            visualTransformation =  if (text.isEmpty() && placeholder != null)
+                PlaceholderTransformation(placeholder)
+            else MaskVisualTransformation("##/##/####"),
         )
     }
 }
@@ -110,15 +99,10 @@ fun TextFieldFormNumber(
     isLoading: Boolean = false,
 ) {
     var text by remember { mutableStateOf("") }
-
     val pattern = remember { Regex("^\\d+\$") }
 
     if(isLoading){
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .shimmerEffect()
-        )
+        Loading()
     } else {
         TextField(
             modifier =
@@ -127,11 +111,6 @@ fun TextFieldFormNumber(
             label = {
                 Text(
                     text = label,
-                )
-            },
-            placeholder = {
-                Text(
-                    text = placeholder ?: "",
                 )
             },
             value = text,
@@ -143,7 +122,9 @@ fun TextFieldFormNumber(
             singleLine = true,
             readOnly = readOnly,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-            visualTransformation = MaskVisualTransformation(""),
+            visualTransformation = if (text.isEmpty() && placeholder != null)
+                PlaceholderTransformation(placeholder)
+            else VisualTransformation.None,
         )
     }
 }

@@ -12,7 +12,7 @@ val apiModule = module {
     single<Api> {
         ServiceFactory.createService(
             parameters = ServiceFactoryParameters(
-                baseUrl = "",
+                baseUrl = "https://private-e0d372-jhoglasxavierrocha.apiary-mock.com",
                 headers = get(named(HTTP_HEADER))
             )
         )

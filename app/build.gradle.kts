@@ -72,6 +72,9 @@ dependencies {
     //Koin
     implementation(libs.koin.compose)
 
+    //coil-compose
+    implementation(libs.coil.compose)
+
     //Module
     implementation(project(":data"))
     implementation(project(":domain"))

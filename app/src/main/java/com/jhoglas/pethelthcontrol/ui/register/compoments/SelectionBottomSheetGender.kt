@@ -17,7 +17,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.jhoglas.domain.entity.GenderEntity
-import com.jhoglas.domain.entity.RaceEntity
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
