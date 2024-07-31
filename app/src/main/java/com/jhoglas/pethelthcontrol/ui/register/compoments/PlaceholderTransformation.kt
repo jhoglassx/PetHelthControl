@@ -9,12 +9,11 @@ class PlaceholderTransformation(
     private val placeholder: String
 ) : VisualTransformation {
     override fun filter(text: AnnotatedString): TransformedText {
-        return placeholderFilter(text, placeholder)
+        return placeholderFilter(placeholder)
     }
 }
 
 fun placeholderFilter(
-    text: AnnotatedString,
     placeholder: String
 ): TransformedText {
 

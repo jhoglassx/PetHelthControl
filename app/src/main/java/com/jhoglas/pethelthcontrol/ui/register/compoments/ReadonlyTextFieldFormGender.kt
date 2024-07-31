@@ -9,7 +9,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import com.jhoglas.domain.entity.GenderEntity
-import com.jhoglas.pethelthcontrol.ui.register.model.RegisterAction
 import com.jhoglas.pethelthcontrol.ui.register.model.RegisterState
 
 

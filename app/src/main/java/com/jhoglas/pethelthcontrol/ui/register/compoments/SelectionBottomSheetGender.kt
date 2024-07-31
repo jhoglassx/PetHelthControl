@@ -24,8 +24,7 @@ import kotlinx.coroutines.launch
 fun SelectionBottomSheetGender(
     title: String,
     list: List<GenderEntity>,
-    valueSelected: (GenderEntity) -> Unit,
-    modifier: Modifier = Modifier
+    valueSelected: (GenderEntity) -> Unit
 ) {
     val sheetState = rememberModalBottomSheetState()
     val scope = rememberCoroutineScope()
