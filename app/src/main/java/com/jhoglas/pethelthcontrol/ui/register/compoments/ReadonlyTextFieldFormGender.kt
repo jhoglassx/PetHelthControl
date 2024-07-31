@@ -8,23 +8,23 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
-import com.jhoglas.domain.entity.RaceEntity
+import com.jhoglas.domain.entity.GenderEntity
 import com.jhoglas.pethelthcontrol.ui.register.model.RegisterAction
 import com.jhoglas.pethelthcontrol.ui.register.model.RegisterState
 
 
 @Composable
-fun ReadonlyTextFieldFormRace(
+fun ReadonlyTextFieldFormGender(
     label: String,
     bottomSheetTitle: String,
     uiState: RegisterState,
 ){
     var showBottomSheet by remember { mutableStateOf(false) }
-    var valueSelected by remember { mutableStateOf<RaceEntity?>(null) }
+    var valueSelected by remember { mutableStateOf<GenderEntity?>(null) }
 
     ReadonlyTextField(
         value = TextFieldValue(
-            text = valueSelected?.name ?: "Selecione uma Raça"
+            text = valueSelected?.name ?: "Selecione um Gênero"
         ) ,
         onValueChange = {},
         onClick = {
@@ -32,17 +32,16 @@ fun ReadonlyTextFieldFormRace(
         },
         label = {
             Text(
-                text = label,
+                text = label
             )
         },
         isLoading = uiState.isLoading
     )
 
-
     if(showBottomSheet && uiState.isLoading.not()){
-        SelectionBottomSheetRace(
+        SelectionBottomSheetGender(
             title = bottomSheetTitle,
-            list = uiState.races,
+            list = uiState.genders,
             valueSelected = {
                 valueSelected = it
                 showBottomSheet = false
@@ -53,15 +52,15 @@ fun ReadonlyTextFieldFormRace(
 
 @Preview
 @Composable
-fun ReadonlyTextFieldFormRacePreview() {
-    ReadonlyTextFieldFormRace(
-        label = "Raça",
-        bottomSheetTitle = "Selecione a raça do seu pet",
+fun ReadonlyTextFieldFormGenderPreview() {
+    ReadonlyTextFieldFormGender(
+        label = "Gênero",
+        bottomSheetTitle = "Selecione o gênero do seu pet",
         uiState = RegisterState(
             isLoading = false,
-            races = listOf(
-                RaceEntity(id = 1, name = "Vira-lata", active = true),
-                RaceEntity(id = 2, name = "Tomba-lixo", active = true),
+            genders = listOf(
+                GenderEntity(id = 1, name = "Macho", active = true),
+                GenderEntity(id = 2, name = "Fêmea", active = true),
             )
         )
     )

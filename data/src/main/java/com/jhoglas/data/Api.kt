@@ -1,7 +1,7 @@
 package com.jhoglas.data
 
-import com.jhoglas.data.remote.entity.RaceResponseRemoteEntity
-import com.jhoglas.data.remote.entity.SexResponseRemoteEntity
+import com.jhoglas.data.remote.entity.GendersResponseRemoteEntity
+import com.jhoglas.data.remote.entity.RacesResponseRemoteEntity
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Url
@@ -9,12 +9,12 @@ import retrofit2.http.Url
 interface Api {
 
     @GET
-    suspend fun getSex(
+    suspend fun getGender(
         @Url endpoint: String
-    ) : Response<SexResponseRemoteEntity>
+    ) : Response<GendersResponseRemoteEntity>
 
     @GET
-    suspend fun getRace(
+    suspend fun getRaces(
         @Url endpoint: String
-    ) : Response<RaceResponseRemoteEntity>
+    ) : Response<RacesResponseRemoteEntity>
 }

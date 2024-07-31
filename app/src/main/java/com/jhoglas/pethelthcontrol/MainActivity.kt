@@ -36,7 +36,7 @@ fun App(){
             startDestination = HomeNavigation
         ) {
             composable<HomeNavigation> { HomeScreen(navController) }
-            composable<RegisterNavigation> { RegisterScreen(navController) }
+            composable<RegisterNavigation> { RegisterScreen(navController = navController) }
         }
     }
 }

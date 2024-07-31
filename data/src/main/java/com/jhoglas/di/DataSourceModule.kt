@@ -1,17 +1,21 @@
 package com.jhoglas.di
 
-import com.jhoglas.data.remote.datasource.SexDataSource
-import com.jhoglas.data.remote.datasource.SexDataSourceImpl
+import com.jhoglas.data.remote.datasource.GenderDataSource
+import com.jhoglas.data.remote.datasource.GenderDataSourceImpl
+import com.jhoglas.data.remote.datasource.RaceDataSource
+import com.jhoglas.data.remote.datasource.RaceDataSourceImpl
 import org.koin.dsl.module
 
 
 val dataSourceModule = module {
-    factory <SexDataSource> {
-        SexDataSourceImpl(
+    factory <GenderDataSource> {
+        GenderDataSourceImpl(
             api = get()
         )
     }
-//    factory <SexDataSource> {
-//        SexDataSourceImpl( api = get() )
-//    }
+    factory <RaceDataSource> {
+        RaceDataSourceImpl(
+            api = get()
+        )
+    }
 }

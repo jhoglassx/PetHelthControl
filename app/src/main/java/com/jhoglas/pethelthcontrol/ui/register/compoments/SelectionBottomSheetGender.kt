@@ -14,15 +14,18 @@ import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.jhoglas.domain.entity.GenderEntity
+import com.jhoglas.domain.entity.RaceEntity
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SelectionBottomSheet(
+fun SelectionBottomSheetGender(
     title: String,
-    list: List<String>,
-    valueSelected: (String) -> Unit,
+    list: List<GenderEntity>,
+    valueSelected: (GenderEntity) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val sheetState = rememberModalBottomSheetState()
@@ -44,7 +47,7 @@ fun SelectionBottomSheet(
             Spacer(modifier = Modifier.height(8.dp))
             list.forEach { value ->
                 Text(
-                    text = value,
+                    text = value.name,
                     modifier = Modifier
                         .fillMaxWidth()
                         .clickable {
@@ -58,12 +61,16 @@ fun SelectionBottomSheet(
     }
 }
 
+@Preview
 @Composable
-fun PreviewPetSexSelectionBottomSheet() {
+fun PreviewPetGenderSelectionBottomSheetPreview() {
     MaterialTheme {
-        SelectionBottomSheet(
+        SelectionBottomSheetGender(
             title = "Select Pet Sex",
-            list = listOf("value1", "value2", "value3"),
+            list = listOf(
+                GenderEntity(id = 1, name = "Macho", active = true),
+                GenderEntity(id = 2, name = "Femea", active = true)
+            ),
             valueSelected = {}
         )
     }
