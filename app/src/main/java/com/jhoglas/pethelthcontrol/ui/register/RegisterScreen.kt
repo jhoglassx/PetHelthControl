@@ -1,5 +1,6 @@
 package com.jhoglas.pethelthcontrol.ui.register
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -19,6 +20,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -26,6 +30,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
+import com.jhoglas.domain.entity.Hair
+import com.jhoglas.domain.entity.PetEntity
 import com.jhoglas.pethelthcontrol.ui.register.compoments.PetImage
 import com.jhoglas.pethelthcontrol.ui.register.compoments.ReadonlyTextFieldFormGender
 import com.jhoglas.pethelthcontrol.ui.register.compoments.ReadonlyTextFieldFormRace
@@ -61,7 +67,8 @@ fun RegisterScreen(
                 .fillMaxSize()
         ) {
             RegisterContent(
-                uiState = uiState
+                uiState = uiState,
+                onAction = viewModel::onAction
             )
         }
     }
@@ -70,7 +77,10 @@ fun RegisterScreen(
 @Composable
 fun RegisterContent(
     uiState: RegisterState,
+    onAction: (RegisterAction) -> Unit
 ) {
+    var pet by remember { mutableStateOf<PetEntity?>(PetEntity()) }
+
     Column(
         modifier =
         Modifier
@@ -89,12 +99,15 @@ fun RegisterContent(
                     modifier = Modifier
                         .fillMaxSize()
                         .background(Color.Black),
-                    contentAlignment = Alignment.TopStart
+                    contentAlignment = Alignment.TopStart,
                 ) {
                     PetImage(
-                        img = "https://petshopdamadre.com.br/wp-content/uploads/2022/11/123.jpg",
-                        isLoading = uiState.isLoading
-                    )
+                        isLoading = uiState.isLoading,
+                    ){
+                        pet = pet?.copy(
+                            image = it
+                        )
+                    }
                 }
             }
             Spacer(modifier = Modifier.padding(4.dp))
@@ -111,7 +124,9 @@ fun RegisterContent(
                         label = "Pet Name: ",
                         placeholder = "Enter your pet's name",
                         isLoading = uiState.isLoading
-                    )
+                    ){ name ->
+                        pet = pet?.copy(name = name)
+                    }
                 }
                 Spacer(modifier = Modifier.padding(4.dp))
                 Row(
@@ -123,7 +138,11 @@ fun RegisterContent(
                         label = "Pet Surname: ",
                         placeholder = "Enter your pet's name",
                         isLoading = uiState.isLoading
-                    )
+                    ){ surname ->
+                        pet = pet?.copy(
+                            surname = surname
+                        )
+                    }
                 }
 
             }
@@ -142,7 +161,11 @@ fun RegisterContent(
             ) {
                 ReadonlyTextFieldFormGender(
                     uiState = uiState
-                )
+                ){ gender ->
+                    pet = pet?.copy(
+                        gender = gender
+                    )
+                }
             }
             Spacer(modifier = Modifier.padding(4.dp))
             Column (
@@ -151,7 +174,11 @@ fun RegisterContent(
             ){
                 ReadonlyTextFieldFormRace(
                     uiState = uiState
-                )
+                ){ race ->
+                    pet = pet?.copy(
+                        race = race
+                    )
+                }
             }
         }
         Spacer(modifier = Modifier.padding(4.dp))
@@ -168,7 +195,11 @@ fun RegisterContent(
                     label = "Pet Age: ",
                     placeholder = "01/01/2021",
                     isLoading = uiState.isLoading
-                )
+                ){ dateBorn ->
+                    pet = pet?.copy(
+                        dateBorn = dateBorn
+                    )
+                }
             }
             Spacer(modifier = Modifier.padding(4.dp))
             Column(
@@ -179,7 +210,11 @@ fun RegisterContent(
                     label = "Pet Weight: ",
                     placeholder = "00.00",
                     isLoading = uiState.isLoading
-                )
+                ){ weight ->
+                    pet = pet?.copy(
+                        weight = weight
+                    )
+                }
             }
         }
         Spacer(modifier = Modifier.padding(4.dp))
@@ -196,7 +231,13 @@ fun RegisterContent(
                     label = "Hair Color: ",
                     placeholder = "Black",
                     isLoading = uiState.isLoading
-                )
+                ){ hairColor ->
+                    pet = pet?.copy(
+                        hair = pet?.hair?.copy(
+                            color = hairColor
+                        )
+                    )
+                }
             }
             Spacer(modifier = Modifier.padding(4.dp))
             Column(
@@ -207,7 +248,13 @@ fun RegisterContent(
                     label = "Hair Type: ",
                     placeholder = "short",
                     isLoading = uiState.isLoading
-                )
+                ){ hairType ->
+                    pet = pet?.copy(
+                        hair = pet?.hair?.copy(
+                            type = hairType
+                        )
+                    )
+                }
             }
         }
         Spacer(modifier = Modifier.padding(4.dp))
@@ -217,7 +264,9 @@ fun RegisterContent(
             horizontalArrangement = Arrangement.End
         ) {
             Button(
-                onClick = {},
+                onClick = {
+                    onAction(RegisterAction.SavePet(pet))
+                },
                 shape = MaterialTheme.shapes.small
             ){
                 Text(
@@ -234,6 +283,7 @@ fun RegisterContent(
 @Composable
 fun RegisterScreenPreview() {
     RegisterContent(
-        uiState = RegisterState()
+        uiState = RegisterState(),
+        onAction = {}
     )
 }

@@ -3,7 +3,9 @@ package com.jhoglas.pethelthcontrol.ui.register
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.jhoglas.domain.entity.PetEntity
 import com.jhoglas.domain.repository.GenderRepository
+import com.jhoglas.domain.repository.PetRepository
 import com.jhoglas.domain.repository.RaceRepository
 import com.jhoglas.pethelthcontrol.ui.register.model.RegisterAction
 import com.jhoglas.pethelthcontrol.ui.register.model.RegisterState
@@ -11,11 +13,11 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import java.lang.Thread.sleep
 
 class RegisterViewModel(
     private val genderRepository: GenderRepository,
-    private val raceRepository: RaceRepository
+    private val raceRepository: RaceRepository,
+    private val petRepository: PetRepository
 ): ViewModel() {
 
     private val _uiState = MutableStateFlow(RegisterState())
@@ -25,6 +27,7 @@ class RegisterViewModel(
         when (action) {
             is RegisterAction.LoadGenders -> getGenders()
             is RegisterAction.LoadRaces -> getRaces()
+            is RegisterAction.SavePet -> savePet(action.pet)
         }
     }
 
@@ -54,6 +57,29 @@ class RegisterViewModel(
                 }
                 Log.i("RegisterViewModel -> getRaces()", races.toString())
             }
+            _uiState.update { it.copy(isLoading = false) }
+        }
+    }
+
+    private fun savePet(
+        pet: PetEntity?
+    ) {
+        viewModelScope.launch {
+            _uiState.update { it.copy(isLoading = true) }
+            pet?.let {
+                petRepository.createPet(it).collect { petEntity ->
+                    petEntity?.let {
+                        _uiState.update { state ->
+                            state.copy(
+                                pet = petEntity
+                            )
+                        }
+                    }
+                    Log.i("RegisterViewModel -> savePet()", petEntity.toString())
+                }
+            }
+
+            Log.i("RegisterViewModel -> savePet()", pet.toString())
             _uiState.update { it.copy(isLoading = false) }
         }
     }

@@ -25,7 +25,6 @@ fun SelectionBottomSheetRace(
     title: String,
     list: List<RaceEntity>,
     valueSelected: (RaceEntity) -> Unit,
-    modifier: Modifier = Modifier
 ) {
     val sheetState = rememberModalBottomSheetState()
     val scope = rememberCoroutineScope()

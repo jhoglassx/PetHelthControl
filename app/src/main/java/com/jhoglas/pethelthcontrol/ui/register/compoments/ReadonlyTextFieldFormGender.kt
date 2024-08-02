@@ -14,7 +14,8 @@ import com.jhoglas.pethelthcontrol.ui.register.model.RegisterState
 
 @Composable
 fun ReadonlyTextFieldFormGender(
-    uiState: RegisterState
+    uiState: RegisterState,
+    gender: (Int) -> Unit
 ){
     var showBottomSheet by remember { mutableStateOf(false) }
     var valueSelected by remember { mutableStateOf<GenderEntity?>(null) }
@@ -41,6 +42,7 @@ fun ReadonlyTextFieldFormGender(
             list = uiState.genders,
             valueSelected = {
                 valueSelected = it
+                gender(it.id)
                 showBottomSheet = false
             }
         )
@@ -57,6 +59,7 @@ fun ReadonlyTextFieldFormGenderPreview() {
                 GenderEntity(id = 1, name = "Macho", active = true),
                 GenderEntity(id = 2, name = "Fêmea", active = true),
             )
-        )
+        ),
+        gender = {}
     )
 }

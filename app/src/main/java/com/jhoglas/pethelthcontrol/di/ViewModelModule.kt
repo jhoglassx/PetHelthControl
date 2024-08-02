@@ -8,7 +8,8 @@ val viewModelModule = module {
     viewModel {
         RegisterViewModel(
             genderRepository = get(),
-            raceRepository = get()
+            raceRepository = get(),
+            petRepository = get()
         )
     }
 }

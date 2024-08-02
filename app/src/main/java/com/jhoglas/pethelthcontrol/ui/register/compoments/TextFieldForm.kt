@@ -7,6 +7,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableDoubleStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -19,7 +20,8 @@ fun TextFieldForm(
     label: String,
     placeholder: String? = null,
     readOnly : Boolean = false,
-    isLoading: Boolean = false
+    isLoading: Boolean = false,
+    text: (String) -> Unit
 ) {
     var text by remember { mutableStateOf("") }
     if(isLoading){
@@ -37,6 +39,7 @@ fun TextFieldForm(
             value = text,
             onValueChange = {
                 text = it
+                text(it)
             },
             maxLines = 1,
             readOnly = readOnly,
@@ -52,7 +55,8 @@ fun TextFieldFormDate(
     label: String,
     placeholder: String? = null,
     readOnly : Boolean = false,
-    isLoading: Boolean = false
+    isLoading: Boolean = false,
+    date: (String) -> Unit
 ) {
     var text by remember { mutableStateOf("") }
 
@@ -79,6 +83,7 @@ fun TextFieldFormDate(
             onValueChange = {
                 if (it.isEmpty() || it.matches(pattern)) {
                     text = it
+                    date(it)
                 }
             },
             singleLine = true,
@@ -97,8 +102,9 @@ fun TextFieldFormNumber(
     placeholder: String? = null,
     readOnly : Boolean = false,
     isLoading: Boolean = false,
+    number: (Double) -> Unit
 ) {
-    var text by remember { mutableStateOf("") }
+    var number by remember { mutableStateOf("") }
     val pattern = remember { Regex("^\\d+\$") }
 
     if(isLoading){
@@ -113,16 +119,17 @@ fun TextFieldFormNumber(
                     text = label,
                 )
             },
-            value = text,
+            value = number,
             onValueChange = {
                 if (it.isEmpty() || it.matches(pattern)) {
-                    text = it
+                    number = it
+                    number(it.toDouble())
                 }
             },
             singleLine = true,
             readOnly = readOnly,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-            visualTransformation = if (text.isEmpty() && placeholder != null)
+            visualTransformation = if (number.isEmpty() && placeholder != null)
                 PlaceholderTransformation(placeholder)
             else VisualTransformation.None,
         )
