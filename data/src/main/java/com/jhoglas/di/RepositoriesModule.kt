@@ -25,7 +25,7 @@ val repositoriesModule = module {
     single<PetRepository> {
         PetRepositoryImpl(
             dataSource = get(),
-            context = get()
+            imageService = get()
         )
     }
 }

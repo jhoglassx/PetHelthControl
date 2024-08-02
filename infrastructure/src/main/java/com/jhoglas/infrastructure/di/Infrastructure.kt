@@ -1,9 +1,13 @@
 package com.jhoglas.infrastructure.di
 
-import org.koin.android.ext.koin.androidContext
+import com.jhoglas.infrastructure.ImageService
 import org.koin.dsl.module
 
 
 val infrastructureModule = module {
-    //single { androidContext() }
+    single {
+        ImageService(
+            context = get()
+        )
+    }
 }

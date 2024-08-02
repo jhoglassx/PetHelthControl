@@ -4,10 +4,11 @@ import com.jhoglas.data.remote.entity.GendersResponseRemoteEntity
 import com.jhoglas.data.remote.entity.PetRequestRemoteEntity
 import com.jhoglas.data.remote.entity.PetResponseRemoteEntity
 import com.jhoglas.data.remote.entity.RacesResponseRemoteEntity
+import okhttp3.MultipartBody
 import retrofit2.Response
-import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.Part
 import retrofit2.http.Url
 
 interface Api {
@@ -23,8 +24,9 @@ interface Api {
     ) : Response<RacesResponseRemoteEntity>
 
     @POST
-    suspend fun savePet(
+    suspend fun createPet(
         @Url endpoint: String,
-        @Body petRequestRemoteEntity: PetRequestRemoteEntity,
+        @Part petRequestRemoteEntity: PetRequestRemoteEntity,
+        @Part image: MultipartBody.Part? = null
     ) : Response<PetResponseRemoteEntity>
 }

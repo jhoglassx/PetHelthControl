@@ -6,6 +6,7 @@ import com.jhoglas.data.remote.entity.PetRequestRemoteEntity
 import com.jhoglas.data.remote.entity.PetResponseRemoteEntity
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import okhttp3.MultipartBody
 
 class PetDataSourceImpl(
     private val api: Api
@@ -19,12 +20,14 @@ class PetDataSourceImpl(
     }
 
     override suspend fun createPet(
-        petRequestRemoteEntity: PetRequestRemoteEntity
+        petRequestRemoteEntity: PetRequestRemoteEntity,
+        image: MultipartBody.Part?
     ): Flow<PetResponseRemoteEntity> = flow {
         try {
-            val response = api.savePet(
+            val response = api.createPet(
                 endpoint = "/pet",
-                petRequestRemoteEntity = petRequestRemoteEntity
+                petRequestRemoteEntity = petRequestRemoteEntity,
+                image = image
             )
             Log.i("PetDataSource -> createPet()", response.toString())
             response.body()?.let { emit(it) }
@@ -40,6 +43,4 @@ class PetDataSourceImpl(
     override suspend fun deletePet(): Flow<PetResponseRemoteEntity> {
         TODO("Not yet implemented")
     }
-
-
 }

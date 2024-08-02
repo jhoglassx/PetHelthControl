@@ -1,9 +1,7 @@
 package com.jhoglas.data.remote.entity
 
-import android.content.Context
+import android.net.Uri
 import com.jhoglas.domain.entity.PetEntity
-import com.jhoglas.infrastructure.toMultipartBodyPart
-import okhttp3.MultipartBody
 
 data class PetRequestRemoteEntity(
     var name: String? = null,
@@ -13,12 +11,9 @@ data class PetRequestRemoteEntity(
     var gender: Int? = null,
     var race: Int? = null,
     val species: Int? = null,
-    val hair: PetHairRequestRemoteEntity? = PetHairRequestRemoteEntity(),
-    var image: MultipartBody.Part? = null
+    val hair: PetHairRequestRemoteEntity? = PetHairRequestRemoteEntity()
 )
-fun PetEntity.toRemote(
-    context: Context
-) = PetRequestRemoteEntity(
+fun PetEntity.toRemote() = PetRequestRemoteEntity(
     name = this.name,
     surname = this.surname,
     dateBorn = this.dateBorn,
@@ -27,10 +22,5 @@ fun PetEntity.toRemote(
     race = this.race,
     species = this.species,
     hair = this.hair?.toRemote(),
-    image = this.image?.toMultipartBodyPart(
-        partName = this.name ?: "image",
-        mediaType = "image/png",
-        context = context
-    )
 )
 
