@@ -7,6 +7,7 @@ import com.jhoglas.domain.entity.PetEntity
 import com.jhoglas.domain.repository.GenderRepository
 import com.jhoglas.domain.repository.PetRepository
 import com.jhoglas.domain.repository.RaceRepository
+import com.jhoglas.infrastructure.isNullOrZero
 import com.jhoglas.pethelthcontrol.ui.register.model.RegisterAction
 import com.jhoglas.pethelthcontrol.ui.register.model.RegisterState
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -28,6 +29,7 @@ class RegisterViewModel(
             is RegisterAction.LoadGenders -> getGenders()
             is RegisterAction.LoadRaces -> getRaces()
             is RegisterAction.SavePet -> savePet(action.pet)
+            is RegisterAction.EnableSaveButton -> isEnableSaveButton(action.pet)
         }
     }
 
@@ -81,6 +83,24 @@ class RegisterViewModel(
 
             Log.i("RegisterViewModel -> savePet()", pet.toString())
             _uiState.update { it.copy(isLoading = false) }
+        }
+    }
+
+    private fun isEnableSaveButton(pet: PetEntity?) {
+        pet?.let { pet ->
+            val saveButtonIsEnabled =
+                pet.name.isNullOrEmpty().not() &&
+                pet.surname.isNullOrEmpty().not() &&
+                pet.race.isNullOrZero().not() &&
+                pet.gender.isNullOrZero().not() &&
+                pet.dateBorn.isNullOrEmpty().not() &&
+                pet.hair?.color.isNullOrEmpty().not() &&
+                pet.hair?.type.isNullOrEmpty().not() &&
+                pet.weight.isNullOrZero().not()
+
+            _uiState.update {
+                it.copy(saveButtonIsEnabled = saveButtonIsEnabled)
+            }
         }
     }
 }

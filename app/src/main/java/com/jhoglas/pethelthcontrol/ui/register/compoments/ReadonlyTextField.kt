@@ -8,6 +8,7 @@ import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 
@@ -18,7 +19,8 @@ fun ReadonlyTextField(
     modifier: Modifier = Modifier,
     onClick: () -> Unit,
     label: @Composable () -> Unit,
-    isLoading: Boolean = false
+    isLoading: Boolean = false,
+    testTag: String = ""
 ) {
     Box(
         modifier = Modifier
@@ -30,7 +32,8 @@ fun ReadonlyTextField(
             TextField(
                 value = value,
                 onValueChange = onValueChange,
-                modifier = modifier,
+                modifier = modifier
+                    .testTag(testTag),
                 label = label
             )
             Box(

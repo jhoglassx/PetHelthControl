@@ -7,11 +7,11 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableDoubleStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.VisualTransformation
 
@@ -21,29 +21,32 @@ fun TextFieldForm(
     placeholder: String? = null,
     readOnly : Boolean = false,
     isLoading: Boolean = false,
+    testTag: String,
     text: (String) -> Unit
 ) {
-    var text by remember { mutableStateOf("") }
+    var value by remember { mutableStateOf("") }
+
     if(isLoading){
         Loading()
     } else {
         TextField(
             modifier =
             Modifier
-                .fillMaxWidth(),
+                .fillMaxWidth()
+                .testTag(testTag),
             label = {
                 Text(
                     text = label,
                 )
             },
-            value = text,
+            value = value,
             onValueChange = {
-                text = it
+                value = it
                 text(it)
             },
             maxLines = 1,
             readOnly = readOnly,
-            visualTransformation = if (text.isEmpty() && placeholder != null)
+            visualTransformation = if (value.isEmpty() && placeholder != null)
                 PlaceholderTransformation(placeholder)
             else VisualTransformation.None,
         )
@@ -56,6 +59,7 @@ fun TextFieldFormDate(
     placeholder: String? = null,
     readOnly : Boolean = false,
     isLoading: Boolean = false,
+    testTag: String,
     date: (String) -> Unit
 ) {
     var text by remember { mutableStateOf("") }
@@ -68,7 +72,8 @@ fun TextFieldFormDate(
         TextField(
             modifier =
             Modifier
-                .fillMaxWidth(),
+                .fillMaxWidth()
+                .testTag(testTag),
             label = {
                 Text(
                     text = label,
@@ -102,6 +107,7 @@ fun TextFieldFormNumber(
     placeholder: String? = null,
     readOnly : Boolean = false,
     isLoading: Boolean = false,
+    testTag: String,
     number: (Double) -> Unit
 ) {
     var number by remember { mutableStateOf("") }
@@ -113,7 +119,8 @@ fun TextFieldFormNumber(
         TextField(
             modifier =
             Modifier
-                .fillMaxWidth(),
+                .fillMaxWidth()
+                .testTag(testTag),
             label = {
                 Text(
                     text = label,

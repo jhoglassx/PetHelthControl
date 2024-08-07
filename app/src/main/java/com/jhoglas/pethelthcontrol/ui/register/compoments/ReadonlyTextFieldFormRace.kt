@@ -15,6 +15,7 @@ import com.jhoglas.pethelthcontrol.ui.register.model.RegisterState
 @Composable
 fun ReadonlyTextFieldFormRace(
     uiState: RegisterState,
+    testTag: String,
     race: (Int) -> Unit
 ){
     var showBottomSheet by remember { mutableStateOf(false) }
@@ -33,7 +34,8 @@ fun ReadonlyTextFieldFormRace(
                 text = "Race",
             )
         },
-        isLoading = uiState.isLoading
+        isLoading = uiState.isLoading,
+        testTag = testTag
     )
 
 
@@ -45,7 +47,8 @@ fun ReadonlyTextFieldFormRace(
                 valueSelected = it
                 race(it.id)
                 showBottomSheet = false
-            }
+            },
+            testTag = testTag
         )
     }
 }
@@ -61,6 +64,7 @@ fun ReadonlyTextFieldFormRacePreview() {
                 RaceEntity(id = 2, name = "Tomba-lixo", active = true),
             )
         ),
-        race = {}
+        race = {},
+        testTag = "ReadonlyTextFieldFormRace"
     )
 }

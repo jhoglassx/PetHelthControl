@@ -8,5 +8,6 @@ data class RegisterState (
     val isLoading : Boolean = false,
     val genders:List<GenderEntity> = emptyList(),
     val races:List<RaceEntity> = emptyList(),
-    val pet:PetEntity = PetEntity()
+    val pet:PetEntity = PetEntity(),
+    val saveButtonIsEnabled:Boolean = false
 )

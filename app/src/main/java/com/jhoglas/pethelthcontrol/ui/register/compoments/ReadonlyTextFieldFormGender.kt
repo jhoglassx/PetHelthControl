@@ -1,11 +1,13 @@
 package com.jhoglas.pethelthcontrol.ui.register.compoments
 
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import com.jhoglas.domain.entity.GenderEntity
@@ -15,12 +17,14 @@ import com.jhoglas.pethelthcontrol.ui.register.model.RegisterState
 @Composable
 fun ReadonlyTextFieldFormGender(
     uiState: RegisterState,
+    testTag: String,
     gender: (Int) -> Unit
 ){
     var showBottomSheet by remember { mutableStateOf(false) }
     var valueSelected by remember { mutableStateOf<GenderEntity?>(null) }
 
     ReadonlyTextField(
+        modifier = Modifier.fillMaxWidth(),
         value = TextFieldValue(
             text = valueSelected?.name ?: "Selecione um Gênero"
         ) ,
@@ -33,7 +37,8 @@ fun ReadonlyTextFieldFormGender(
                 text = "Gender",
             )
         },
-        isLoading = uiState.isLoading
+        isLoading = uiState.isLoading,
+        testTag = testTag
     )
 
     if(showBottomSheet && uiState.isLoading.not()){
@@ -44,7 +49,8 @@ fun ReadonlyTextFieldFormGender(
                 valueSelected = it
                 gender(it.id)
                 showBottomSheet = false
-            }
+            },
+            testTag = testTag
         )
     }
 }
@@ -60,6 +66,7 @@ fun ReadonlyTextFieldFormGenderPreview() {
                 GenderEntity(id = 2, name = "Fêmea", active = true),
             )
         ),
-        gender = {}
+        gender = {},
+        testTag = "ReadonlyTextFieldFormGender"
     )
 }

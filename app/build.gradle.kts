@@ -44,7 +44,10 @@ android {
 
     packaging {
         resources {
-            excludes += "/META-INF/{AL2.0,LGPL2.1}"
+            excludes += "/META-INF/AL2.0"
+            excludes += "/META-INF/LGPL2.1"
+            excludes += "META-INF/LICENSE.md"
+            excludes += "META-INF/LICENSE-notice.md"
         }
     }
 }
@@ -60,6 +63,7 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     implementation(libs.navigation.compose)
+    implementation(libs.androidx.navigation.testing)
     implementation(libs.kotlinx.serialization.json)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
@@ -75,8 +79,13 @@ dependencies {
     //coil-compose
     implementation(libs.coil.compose)
 
+    //mockk
+    testImplementation(libs.mockk)
+    androidTestImplementation(libs.mockk.android)
+
     //Module
     implementation(project(":data"))
     implementation(project(":domain"))
     implementation(project(":infrastructure"))
+
 }
