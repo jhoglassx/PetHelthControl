@@ -55,9 +55,9 @@ jobs:
       - name: Start Emulator
         uses: reactivecircus/android-emulator-runner@v2
         with:
-          api-level: 29
+          api-level: 34
           target: google_apis
           arch: x86
-          profile: Nexus 6
+          profile: Pixel XL
           emulator-options: '-no-snapshot-load -no-window -noaudio'
           script: ./gradlew connectedCheck --stacktrace
