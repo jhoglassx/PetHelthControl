@@ -5,11 +5,7 @@ plugins {
     alias(libs.plugins.compose.compiler)
 }
 
-java {
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(libs.versions.java.get().toInt())
-    }
-}
+
 
 android {
     namespace = "com.jhoglas.pethelthcontrol"
@@ -48,6 +44,12 @@ android {
             excludes += "/META-INF/LGPL2.1"
             excludes += "META-INF/LICENSE.md"
             excludes += "META-INF/LICENSE-notice.md"
+        }
+    }
+
+    java {
+        toolchain {
+            languageVersion = JavaLanguageVersion.of(libs.versions.java.get().toInt())
         }
     }
 }

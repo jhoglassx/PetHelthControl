@@ -3,12 +3,6 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android)
 }
 
-java {
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(libs.versions.java.get().toInt())
-    }
-}
-
 android {
     namespace = "com.jhoglas.domain"
     compileSdk = libs.versions.compileSdk.get().toInt()
@@ -27,6 +21,12 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+        }
+    }
+
+    java {
+        toolchain {
+            languageVersion = JavaLanguageVersion.of(libs.versions.java.get().toInt())
         }
     }
 }
