@@ -1,6 +1,9 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.jetbrains.kotlin.android)
+    alias(libs.plugins.ksp)
+    id("kotlin-parcelize")
+    id("kotlin-kapt")
 }
 
 android {
@@ -24,9 +27,17 @@ android {
         }
     }
 
-    java {
-        toolchain {
-            languageVersion = JavaLanguageVersion.of(libs.versions.java.get().toInt())
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+    kotlinOptions {
+        jvmTarget = "17"
+    }
+
+    kapt {
+        arguments {
+            arg("room.schemaLocation", "$project.rootDir/app/schemas".toString())
         }
     }
 }

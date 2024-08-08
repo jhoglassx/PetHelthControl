@@ -3,6 +3,9 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.ksp)
+    id("kotlin-parcelize")
+    id("kotlin-kapt")
 }
 
 
@@ -33,7 +36,13 @@ android {
             )
         }
     }
-
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+    kotlinOptions {
+        jvmTarget = "17"
+    }
     buildFeatures {
         compose = true
     }
@@ -47,9 +56,9 @@ android {
         }
     }
 
-    java {
-        toolchain {
-            languageVersion = JavaLanguageVersion.of(libs.versions.java.get().toInt())
+    kapt {
+        arguments {
+            arg("room.schemaLocation", "$project.rootDir/app/schemas".toString())
         }
     }
 }
