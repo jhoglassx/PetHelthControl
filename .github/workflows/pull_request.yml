@@ -41,6 +41,9 @@ jobs:
           java-version: 17
           cache: 'gradle'
 
+      - name: List AVD devices
+        run: avdmanager list device
+
       - name: Start Emulator
         uses: reactivecircus/android-emulator-runner@v2
         with:
