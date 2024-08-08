@@ -41,12 +41,6 @@ jobs:
           java-version: 17
           cache: 'gradle'
 
-      - name: Enable KVM
-        run: |
-          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
-          sudo udevadm control --reload-rules
-          sudo udevadm trigger --name-match=kvm
-
       - name: Start Emulator
         uses: reactivecircus/android-emulator-runner@v2
         with:
@@ -55,9 +49,4 @@ jobs:
           arch: x86
           profile: Nexus 6
           emulator-options: '-no-snapshot-load -no-window -noaudio'
-
-      - name: Grant execute permissions for gradlew
-        run: chmod +x gradlew
-
-      - name: Run instrumented tests
-        run: ./gradlew connectedCheck --stacktrace
+          script: ./gradlew connectedCheck --stacktrace
