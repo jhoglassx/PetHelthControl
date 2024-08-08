@@ -49,9 +49,6 @@ jobs:
           sdkmanager --install "platform-tools" "emulator" "system-images;android-29;google_apis;x86"
           yes | sdkmanager --licenses
 
-      - name: List AVD devices
-        run: avdmanager list device
-
       - name: Start Emulator
         uses: reactivecircus/android-emulator-runner@v2
         with:
