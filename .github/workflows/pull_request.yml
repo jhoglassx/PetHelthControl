@@ -41,6 +41,12 @@ jobs:
           java-version: 17
           cache: 'gradle'
 
+      - name: Install Android SDK
+        run: sdkmanager --install "platform-tools" "emulator" "system-images;android-29;google_apis;x86"
+
+      - name: Accept Licenses
+        run: yes | sdkmanager --licenses
+
       - name: List AVD devices
         run: avdmanager list device
 
