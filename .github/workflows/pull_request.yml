@@ -65,7 +65,7 @@ jobs:
           path: '**/build/jacoco/*.exec'
 
   instrumentation-tests:
-    name: Instrumentation Tests
+    name: Instrumentation Tests1
     runs-on: ubuntu-latest
     timeout-minutes: 60
     needs: [ checks, build ]
