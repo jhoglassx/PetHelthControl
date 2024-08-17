@@ -8,11 +8,18 @@ plugins {
 }
 
 jacoco {
-    toolVersion = "0.8.7"
+    toolVersion = "0.8.8"
+}
+
+subprojects {
+    tasks.withType<Test> {
+        useJUnitPlatform()
+
+        finalizedBy(tasks.named("jacocoTestReport"))
+    }
 }
 
 tasks.register("jacocoRootReport", JacocoReport::class) {
-    dependsOn(subprojects.map { it.tasks.named("jacocoTestReport") })
 
     reports {
         xml.required.set(true)
