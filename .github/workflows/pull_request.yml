@@ -103,13 +103,11 @@ jobs:
     needs: [ unit-tests ]
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Set up JDK 11
-        uses: actions/setup-java@v2
+      - uses: actions/checkout@v2
+      - uses: actions/setup-java@v2
         with:
           distribution: 'adopt'
-          java-version: '11'
+          java-version: ${{ env.JAVA_VERSION }}
 
       - name: Download unit test coverage data
         uses: actions/download-artifact@v3
@@ -135,13 +133,11 @@ jobs:
     needs: [ instrumentation-tests ]
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Set up JDK 11
-        uses: actions/setup-java@v2
+      - uses: actions/checkout@v2
+      - uses: actions/setup-java@v2
         with:
           distribution: 'adopt'
-          java-version: '11'
+          java-version: ${{ env.JAVA_VERSION }}
 
       - name: Download instrumentation test coverage data
         uses: actions/download-artifact@v3
@@ -164,13 +160,11 @@ jobs:
     needs: [ coverage-unit-report, coverage-instrumentation-report ]
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Set up JDK 11
-        uses: actions/setup-java@v2
+      - uses: actions/checkout@v2
+      - uses: actions/setup-java@v2
         with:
           distribution: 'adopt'
-          java-version: '11'
+          java-version: ${{ env.JAVA_VERSION }}
 
       - name: Download unit test coverage data
         uses: actions/download-artifact@v3
