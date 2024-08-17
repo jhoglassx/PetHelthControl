@@ -127,7 +127,7 @@ jobs:
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           disable-animations: true
           profile: Nexus One
-          script: ./gradlew connectedDebugAndroidTest
+          script: SKIP_ERRORPRONE=true SKIP_JAVADOC=true ./gradlew cAT --stacktrace --no-watch-fs -Dorg.gradle.workers.max=2
 
       - name: Upload test results
         if: always()
