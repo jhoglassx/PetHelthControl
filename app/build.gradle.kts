@@ -8,16 +8,14 @@ plugins {
     id("kotlin-kapt")
 }
 
-
-
 android {
     namespace = "com.jhoglas.pethelthcontrol"
-    compileSdk = libs.versions.compileSdk.get().toInt()
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.jhoglas.pethelthcontrol"
-        minSdk = libs.versions.minSdk.get().toInt()
-        targetSdk = libs.versions.targetSdk.get().toInt()
+        minSdk = 33
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
 

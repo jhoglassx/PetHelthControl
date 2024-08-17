@@ -41,15 +41,14 @@ jobs:
           java-version: 17
           cache: 'gradle'
 
-      - name: Setup Android SDK
-        uses: android-actions/setup-android@v2
-
       - name: Start Emulator
         uses: reactivecircus/android-emulator-runner@v2
         with:
-          api-level: 34
+          api-level: 33
           target: google_apis
           arch: x86
           profile: Nexus 6
           emulator-options: '-no-snapshot-load -no-window -noaudio'
-          script: ./gradlew connectedCheck --stacktrace
+
+      - name: Run Instrumented Tests
+        run: ./gradlew connectedCheck --stacktrace
