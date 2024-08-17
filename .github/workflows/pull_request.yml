@@ -129,7 +129,7 @@ jobs:
         uses: actions/setup-java@v2
         with:
           distribution: 'adopt'
-          java-version: ${{ env.JAVA_VERSION }}
+          java-version: '11'
 
       - name: Generate JaCoCo reports for all modules
         run: |
@@ -138,17 +138,17 @@ jobs:
           ./gradlew :domain:jacocoTestReport
           ./gradlew :infrastructure:jacocoTestReport
 
-      - name: Upload all coverage reports as artifact
+      - name: Upload all unit test coverage reports as artifact
         uses: actions/upload-artifact@v3
         with:
-          name: jacoco-reports
+          name: jacoco-unit-test-reports
           path: |
             app/build/reports/jacoco/jacocoTestReport/html/
             data/build/reports/jacoco/jacocoTestReport/html/
             domain/build/reports/jacoco/jacocoTestReport/html/
             infrastructure/build/reports/jacoco/jacocoTestReport/html/
 
-      - name: Upload coverage to Codecov
+      - name: Upload unit test coverage to Codecov
         uses: codecov/codecov-action@v2
         with:
           files: |
@@ -170,21 +170,26 @@ jobs:
         uses: actions/setup-java@v2
         with:
           distribution: 'adopt'
-          java-version: ${{ env.JAVA_VERSION }}
+          java-version: '11'
 
-      - name: Generate JaCoCo reports for all modules
-        run: |
-          ./gradlew :app:createDebugCoverageReport
+      - name: Generate JaCoCo report for instrumentation tests
+        run: ./gradlew createDebugCoverageReport
 
-      - name: Upload all coverage reports as artifact
+      - name: Upload instrumentation test coverage reports as artifact
         uses: actions/upload-artifact@v3
         with:
-          name: jacoco-reports
+          name: jacoco-instrumentation-reports
           path: |
             app/build/reports/jacoco/coverage/
+            data/build/reports/jacoco/coverage/
+            domain/build/reports/jacoco/coverage/
+            infrastructure/build/reports/jacoco/coverage/
 
-      - name: Upload coverage to Codecov
+      - name: Upload instrumentation test coverage to Codecov
         uses: codecov/codecov-action@v2
         with:
           files: |
             app/build/reports/jacoco/coverage/coverage.ec
+            data/build/reports/jacoco/coverage/coverage.ec
+            domain/build/reports/jacoco/coverage/coverage.ec
+            infrastructure/build/reports/jacoco/coverage/coverage.ec
