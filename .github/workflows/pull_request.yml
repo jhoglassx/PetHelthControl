@@ -45,7 +45,7 @@ jobs:
   unit-tests:
     name: Unit Tests
     runs-on: ubuntu-latest
-    needs: build
+    needs: [checks, build]
 
     steps:
       - uses: actions/checkout@v4
@@ -71,7 +71,7 @@ jobs:
     name: Instrumentation Tests
     runs-on: ubuntu-latest
     timeout-minutes: 60
-    needs: build
+    needs: [checks, build]
 
     steps:
       - name: Enable KVM group perms
