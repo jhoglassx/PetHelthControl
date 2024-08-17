@@ -10,6 +10,7 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-java@v4
@@ -44,7 +45,8 @@ jobs:
   unit-tests:
     name: Unit Tests
     runs-on: ubuntu-latest
-    needs: [ checks, build ]
+    needs: [checks, build]
+
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-java@v4
@@ -55,20 +57,22 @@ jobs:
       - name: Grant execute permissions for gradlew
         run: chmod +x gradlew
 
-      - name: Run unit tests for all modules
-        run: ./gradlew testDebugUnitTest
+      - name: Run unit tests
+        run: ./gradlew clean testDebug
 
-      - name: Save coverage data
-        uses: actions/upload-artifact@v3
+      - name: Upload unit Test Results
+        uses: actions/upload-artifact@v4
+        if: always()
         with:
-          name: coverage-unit-data
-          path: '**/build/jacoco/*.exec'
+          name: test_results_${{ matrix.api-versions }}
+          path: '**/build/test-results/**/TEST-*.xml'
 
   instrumentation-tests:
-    name: Instrumentation Tests1
+    name: Instrumentation Tests
     runs-on: ubuntu-latest
     timeout-minutes: 60
-    needs: [ checks, build ]
+    needs: [checks, build]
+
     steps:
       - name: Enable KVM group perms
         run: |
@@ -89,103 +93,44 @@ jobs:
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: 29
-          script: ./gradlew connectedDebugAndroidTest --stacktrace
+          script: ./gradlew connectedCheck --stacktrace
+        env:
+          API_LEVEL: 29
 
-      - name: Save coverage data
-        uses: actions/upload-artifact@v3
+      - name: Upload instrumentation test results
+        if: always()
+        uses: actions/upload-artifact@v4
         with:
-          name: coverage-instrumentation-data
-          path: '**/build/outputs/code-coverage/connected/*'
+          name: test-results-${{ matrix.api-level }}-${{ steps.determine-target.outputs.TARGET }}-${{ matrix.shard }}
+          path: |
+            **/build/reports/*
+            **/build/outputs/*/connected/*
 
-  coverage-unit-report:
-    name: Coverage Unit Report
+  coverage-report:
+    name: Coverage Report
     runs-on: ubuntu-latest
-    needs: [ unit-tests ]
+    needs: [ instrumentation-tests, unit-tests ]
+
     steps:
       - name: Checkout code
-      - uses: actions/checkout@v2
-      - uses: actions/setup-java@v2
+        uses: actions/checkout@v2
+
+      - name: Set up JDK 11
+        uses: actions/setup-java@v2
         with:
           distribution: 'adopt'
           java-version: ${{ env.JAVA_VERSION }}
 
-      - name: Download unit test coverage data
-        uses: actions/download-artifact@v3
-        with:
-          name: coverage-unit-data
-
-      - name: Generate JaCoCo reports for all modules
+      - name: Generate coverage report
         run: ./gradlew jacocoTestReport
 
-      - name: Upload all unit test coverage reports as artifact
+      - name: Upload coverage report
         uses: actions/upload-artifact@v3
         with:
-          name: jacoco-unit-test-reports
-          path: |
-            app/build/reports/jacoco/jacocoTestReport/html/
-            data/build/reports/jacoco/jacocoTestReport/html/
-            domain/build/reports/jacoco/jacocoTestReport/html/
-            infrastructure/build/reports/jacoco/jacocoTestReport/html/
+          name: jacoco-report
+          path: build/reports/jacoco/jacocoTestReport/html/
 
-  coverage-instrumentation-report:
-    name: Coverage Instrumentation Report
-    runs-on: ubuntu-latest
-    needs: [ instrumentation-tests ]
-    steps:
-      - name: Checkout code
-      - uses: actions/checkout@v2
-      - uses: actions/setup-java@v2
-        with:
-          distribution: 'adopt'
-          java-version: ${{ env.JAVA_VERSION }}
-
-      - name: Download instrumentation test coverage data
-        uses: actions/download-artifact@v3
-        with:
-          name: coverage-instrumentation-data
-
-      - name: Generate JaCoCo report for instrumentation tests
-        run: ./gradlew createDebugCoverageReport
-
-      - name: Upload instrumentation test coverage reports as artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: jacoco-instrumentation-reports
-          path: |
-            app/build/reports/jacoco/coverage/
-
-  combined-coverage-report:
-    name: Combined Coverage Report
-    runs-on: ubuntu-latest
-    needs: [ coverage-unit-report, coverage-instrumentation-report ]
-    steps:
-      - name: Checkout code
-      - uses: actions/checkout@v2
-      - uses: actions/setup-java@v2
-        with:
-          distribution: 'adopt'
-          java-version: ${{ env.JAVA_VERSION }}
-
-      - name: Download unit test coverage data
-        uses: actions/download-artifact@v3
-        with:
-          name: jacoco-unit-test-reports
-
-      - name: Download instrumentation test coverage data
-        uses: actions/download-artifact@v3
-        with:
-          name: jacoco-instrumentation-reports
-
-      - name: Combine and Generate Combined JaCoCo Report
-        run: ./gradlew jacocoTestReport --continue
-
-      - name: Upload combined coverage report as artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: jacoco-combined-coverage-report
-          path: '**/build/reports/jacoco/jacocoTestReport/html/'
-
-      - name: Upload combined coverage to Codecov
+      - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v2
         with:
-          files: '**/build/reports/jacoco/jacocoTestReport/xml/report.xml'
+          files: app/build/reports/jacoco/jacocoTestReport/xml/report.xml
