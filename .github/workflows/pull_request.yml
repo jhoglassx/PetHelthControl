@@ -44,11 +44,6 @@ jobs:
       - name: Setup Android SDK
         uses: android-actions/setup-android@v2
 
-      - name: Install Android SDK components
-        run: |
-          sdkmanager --install "platform-tools" "emulator" "system-images;android-34;google_apis;x86"
-          yes | sdkmanager --licenses
-
       - name: Start Emulator
         uses: reactivecircus/android-emulator-runner@v2
         with:
