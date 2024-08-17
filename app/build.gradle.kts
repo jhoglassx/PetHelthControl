@@ -26,6 +26,10 @@ android {
     }
 
     buildTypes {
+        debug {
+            enableUnitTestCoverage = true
+            enableAndroidTestCoverage = true
+        }
         release {
             isMinifyEnabled = false
             proguardFiles(
@@ -92,18 +96,5 @@ dependencies {
     implementation(project(":infrastructure"))
 }
 
-tasks.register<JacocoReport>("jacocoTestReport") {
-    dependsOn("testDebugUnitTest")
 
-    reports {
-        xml.required.set(true)
-        html.required.set(true)
-    }
-
-    sourceDirectories.setFrom(files("src/main/java"))
-    classDirectories.setFrom(files("build/intermediates/javac/debug/classes"))
-    executionData.setFrom(fileTree("build") {
-        include("jacoco/testDebugUnitTest.exec")
-    })
-}
 
