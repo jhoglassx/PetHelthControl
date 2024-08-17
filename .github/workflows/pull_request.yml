@@ -46,7 +46,7 @@ jobs:
 
       - name: Install Android SDK components
         run: |
-          sdkmanager --install "platform-tools" "emulator" "system-images;android-29;google_apis;x86"
+          sdkmanager --install "platform-tools" "emulator" "system-images;android-34;google_apis;x86"
           yes | sdkmanager --licenses
 
       - name: Start Emulator
