@@ -41,13 +41,20 @@ jobs:
           java-version: 17
           cache: 'gradle'
 
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v2
+
+      - name: Install Android SDK components
+        run: |
+          sdkmanager --install "platform-tools" "emulator" "system-images;android-29;google_apis;x86"
+          yes | sdkmanager --licenses
+
       - name: Start Emulator
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: 34
           target: google_apis
           arch: x86
-          profile: Pixel XL
+          profile: Nexus 6
           emulator-options: '-no-snapshot-load -no-window -noaudio'
-          disable-animations: true
           script: ./gradlew connectedCheck --stacktrace
