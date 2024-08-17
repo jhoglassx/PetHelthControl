@@ -49,6 +49,5 @@ jobs:
           arch: x86
           profile: Nexus 6
           emulator-options: '-no-snapshot-load -no-window -noaudio -wipe-data'
-          disableAnimations: true
+          disable-animations: true
           script: ./gradlew connectedCheck --stacktrace
-          boot-timeout: 600
