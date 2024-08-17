@@ -78,7 +78,7 @@ tasks.withType<Test> {
 }
 
 tasks.register("jacocoTestReport", JacocoReport::class) {
-    dependsOn("testDebugUnitTest", "createDebugCoverageReport")
+    dependsOn("testDebugUnitTest")
 
     reports {
         xml.required.set(true)
@@ -100,4 +100,8 @@ tasks.register("jacocoTestReport", JacocoReport::class) {
             "$buildDir/outputs/jacoco/connected/*coverage.ec"
         )
     )
+}
+
+tasks.named("check") {
+    dependsOn("jacocoTestReport")
 }
