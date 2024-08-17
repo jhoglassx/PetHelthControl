@@ -2,7 +2,6 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.ksp)
-    id("kotlin-kapt")
     id("kotlin-parcelize")
 }
 
@@ -28,17 +27,11 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
     }
     kotlinOptions {
-        jvmTarget = "17"
-    }
-
-    kapt {
-        arguments {
-            arg("room.schemaLocation", "$project.rootDir/app/schemas".toString())
-        }
+        jvmTarget = "21"
     }
 }
 
@@ -50,9 +43,6 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-
-    //kpt
-    kapt(libs.room.kapt)
 
     //Retrofit
     implementation(libs.retrofit)

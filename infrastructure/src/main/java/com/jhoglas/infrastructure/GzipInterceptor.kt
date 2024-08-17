@@ -1,9 +1,13 @@
 package com.jhoglas.infrastructure
 
 import okhttp3.Interceptor
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.Request
+import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.Response
 import okhttp3.ResponseBody
+import okhttp3.ResponseBody.Companion.toResponseBody
 import okio.GzipSource
 import okio.IOException
 import okio.buffer
@@ -29,7 +33,7 @@ class GzipInterceptor : Interceptor {
         }
         val gzipSource = GzipSource(response.body!!.source())
         val bodyString = gzipSource.buffer().readUtf8()
-        val responseBody = ResponseBody.create(response.body!!.contentType(), bodyString)
+        val responseBody: ResponseBody = bodyString.toResponseBody("application/json; charset=utf-8".toMediaTypeOrNull())
         val strippedHeaders = response.headers.newBuilder()
             .removeAll("Content-Encoding")
             .removeAll("Content-Length")

@@ -5,7 +5,6 @@ plugins {
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.ksp)
     id("kotlin-parcelize")
-    id("kotlin-kapt")
 }
 
 android {
@@ -35,11 +34,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
     }
     kotlinOptions {
-        jvmTarget = "17"
+        jvmTarget = "21"
     }
     buildFeatures {
         compose = true
@@ -51,12 +50,6 @@ android {
             excludes += "/META-INF/LGPL2.1"
             excludes += "META-INF/LICENSE.md"
             excludes += "META-INF/LICENSE-notice.md"
-        }
-    }
-
-    kapt {
-        arguments {
-            arg("room.schemaLocation", "$project.rootDir/app/schemas".toString())
         }
     }
 }
