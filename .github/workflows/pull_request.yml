@@ -93,7 +93,7 @@ jobs:
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: 29
-          script: ./gradlew connectedCheck --stacktrace
+          script: ./gradlew clean connectedCheck --stacktrace
         env:
           API_LEVEL: 29
 
@@ -121,16 +121,28 @@ jobs:
           distribution: 'adopt'
           java-version: ${{ env.JAVA_VERSION }}
 
-      - name: Generate coverage report
-        run: ./gradlew jacocoTestReport
+      - name: Generate JaCoCo reports for all modules
+        run: |
+          ./gradlew :app:jacocoTestReport
+          ./gradlew :data:jacocoTestReport
+          ./gradlew :domain:jacocoTestReport
+          ./gradlew :infrastructure:jacocoTestReport
 
-      - name: Upload coverage report
+      - name: Upload all coverage reports as artifact
         uses: actions/upload-artifact@v3
         with:
-          name: jacoco-report
-          path: build/reports/jacoco/jacocoTestReport/html/
+          name: jacoco-reports
+          path: |
+            app/build/reports/jacoco/jacocoTestReport/html/
+            data/build/reports/jacoco/jacocoTestReport/html/
+            domain/build/reports/jacoco/jacocoTestReport/html/
+            infrastructure/build/reports/jacoco/jacocoTestReport/html/
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v2
         with:
-          files: app/build/reports/jacoco/jacocoTestReport/xml/report.xml
+          files: |
+            app/build/reports/jacoco/jacocoTestReport/xml/report.xml
+            data/build/reports/jacoco/jacocoTestReport/xml/report.xml
+            domain/build/reports/jacoco/jacocoTestReport/xml/report.xml
+            infrastructure/build/reports/jacoco/jacocoTestReport/xml/report.xml

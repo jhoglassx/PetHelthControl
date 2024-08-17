@@ -38,6 +38,7 @@ android {
             )
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_21
         targetCompatibility = JavaVersion.VERSION_21
@@ -100,31 +101,35 @@ jacoco {
     toolVersion = "0.8.11"
 }
 
-tasks.register<JacocoReport>("jacocoTestReport") {
+tasks.withType<Test> {
+    useJUnitPlatform()
 
-    val fileFilter = listOf(
-        "**/R.class",
-        "**/R$*.class",
-        "**/BuildConfig.*",
-        "**/Manifest*.*",
-        "**/*Test*.*"
-    )
+    finalizedBy(tasks.named("jacocoTestReport"))
+}
 
-    val debugTree = fileTree("${layout.buildDirectory.asFile}/intermediates/classes/debug") {
-        exclude(fileFilter)
-    }
-
-    sourceDirectories.setFrom(files("src/main/java"))
-    classDirectories.setFrom(files(debugTree))
-    executionData.setFrom(fileTree("${layout.buildDirectory.asFile}/jacoco") {
-        include("*.exec")
-    })
+tasks.register("jacocoTestReport", JacocoReport::class) {
+    dependsOn("testDebugUnitTest", "createDebugCoverageReport")
 
     reports {
         xml.required.set(true)
         html.required.set(true)
-        html.outputLocation.set(file("${layout.buildDirectory.asFile}/reports/jacoco"))
     }
+
+    val fileFilter = listOf("**/R.class", "**/R$*.class", "**/BuildConfig.*", "**/Manifest*.*", "**/*Test*.*")
+
+    sourceDirectories.setFrom(files("$projectDir/src/main/java"))
+    classDirectories.setFrom(files("$buildDir/tmp/kotlin-classes/debug").map {
+        fileTree(it) {
+            exclude(fileFilter)
+        }
+    })
+
+    executionData.setFrom(
+        files(
+            "$buildDir/jacoco/testDebugUnitTest.exec",
+            "$buildDir/outputs/jacoco/connected/*coverage.ec"
+        )
+    )
 }
 
 
