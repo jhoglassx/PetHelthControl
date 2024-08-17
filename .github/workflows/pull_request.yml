@@ -58,16 +58,16 @@ jobs:
         run: chmod +x gradlew
 
       - name: Run unit tests for app module
-        run: ./gradlew :app:testDebugUnitTest
+        run: ./gradlew :app:testDebug
 
       - name: Run unit tests for data module
-        run: ./gradlew :data:testDebugUnitTest
+        run: ./gradlew :data:testDebug
 
       - name: Run unit tests for domain module
-        run: ./gradlew :domain:testDebugUnitTest
+        run: ./gradlew :domain:testDebug
 
       - name: Run unit tests for infrastructure module
-        run: ./gradlew :infrastructure:testDebugUnitTest
+        run: ./gradlew :infrastructure:testDebug
 
       - name: Upload unit Test Results
         uses: actions/upload-artifact@v4
@@ -173,7 +173,7 @@ jobs:
           java-version: '11'
 
       - name: Generate JaCoCo report for instrumentation tests
-        run: ./gradlew createDebugCoverageReport
+        run: ./gradlew jacocoTestReport
 
       - name: Upload instrumentation test coverage reports as artifact
         uses: actions/upload-artifact@v3
