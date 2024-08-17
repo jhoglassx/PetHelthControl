@@ -5,7 +5,6 @@ plugins {
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.ksp)
     id("kotlin-parcelize")
-    id("jacoco")
 }
 
 android {
@@ -95,39 +94,4 @@ dependencies {
     implementation(project(":data"))
     implementation(project(":domain"))
     implementation(project(":infrastructure"))
-}
-
-jacoco {
-    toolVersion = "0.8.11"
-}
-
-tasks.withType<Test> {
-    useJUnitPlatform()
-
-    finalizedBy(tasks.named("jacocoTestReport"))
-}
-
-tasks.register("jacocoTestReport", JacocoReport::class) {
-    dependsOn("testDebugUnitTest")
-
-    reports {
-        xml.required.set(true)
-        html.required.set(true)
-    }
-
-    val fileFilter = listOf("**/R.class", "**/R$*.class", "**/BuildConfig.*", "**/Manifest*.*", "**/*Test*.*")
-
-    sourceDirectories.setFrom(files("$projectDir/src/main/java"))
-    classDirectories.setFrom(files("${layout.buildDirectory.asFile}/tmp/kotlin-classes/debug").map {
-        fileTree(it) {
-            exclude(fileFilter)
-        }
-    })
-
-    executionData.setFrom(
-        files(
-            "${layout.buildDirectory.asFile}/jacoco/testDebugUnitTest.exec",
-            "${layout.buildDirectory.asFile}/outputs/jacoco/connected/*coverage.ec"
-        )
-    )
 }
