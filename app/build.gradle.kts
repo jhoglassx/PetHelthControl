@@ -3,6 +3,8 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.ksp)
+    id("kotlin-parcelize")
 }
 
 android {
@@ -12,7 +14,7 @@ android {
     defaultConfig {
         applicationId = "com.jhoglas.pethelthcontrol"
         minSdk = 29
-        targetSdk = 34
+        targetSdk = compileSdk
         versionCode = 1
         versionName = "1.0"
 
@@ -23,6 +25,10 @@ android {
     }
 
     buildTypes {
+        debug {
+            enableUnitTestCoverage = true
+            enableAndroidTestCoverage = true
+        }
         release {
             isMinifyEnabled = false
             proguardFiles(
@@ -31,12 +37,13 @@ android {
             )
         }
     }
+
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
     }
     kotlinOptions {
-        jvmTarget = "11"
+        jvmTarget = "21"
     }
     buildFeatures {
         compose = true
@@ -87,5 +94,4 @@ dependencies {
     implementation(project(":data"))
     implementation(project(":domain"))
     implementation(project(":infrastructure"))
-
 }
