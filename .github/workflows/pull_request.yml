@@ -5,7 +5,9 @@ on:
     branches: [master]
 
 env:
+  JAVA_DISTRIBUTION: 'adopt'
   JAVA_VERSION: 21
+  API_LEVEL: 29
 
 jobs:
   build:
@@ -15,7 +17,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-java@v4
         with:
-          distribution: 'adopt'
+          distribution: ${{ env.JAVA_DISTRIBUTION }}
           java-version: ${{ env.JAVA_VERSION }}
 
       - uses: gradle/actions/setup-gradle@v4
@@ -33,7 +35,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-java@v4
         with:
-          distribution: 'adopt'
+          distribution: ${{ env.JAVA_DISTRIBUTION }}
           java-version: ${{ env.JAVA_VERSION }}
 
       - name: Check Gradle wrapper
@@ -51,7 +53,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-java@v4
         with:
-          distribution: 'adopt'
+          distribution: ${{ env.JAVA_DISTRIBUTION }}
           java-version: ${{ env.JAVA_VERSION }}
 
       - name: Grant execute permissions for gradlew
@@ -84,7 +86,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-java@v4
         with:
-          distribution: 'adopt'
+          distribution: ${{ env.JAVA_DISTRIBUTION }}
           java-version: ${{ env.JAVA_VERSION }}
 
       - uses: gradle/actions/setup-gradle@v4
@@ -92,16 +94,16 @@ jobs:
       - name: Run instrumentation tests
         uses: reactivecircus/android-emulator-runner@v2
         with:
-          api-level: 29
+          api-level: ${{ env.API_LEVEL }}
           script: ./gradlew connectedCheck --stacktrace
         env:
-          API_LEVEL: 29
+          API_LEVEL: ${{ env.API_LEVEL }}
 
       - name: Upload instrumentation test results
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: test-results-${{ matrix.api-level }}-${{ steps.determine-target.outputs.TARGET }}-${{ matrix.shard }}
+          name: test-results-${{ env.API_LEVEL }}
           path: |
             **/build/reports/*
             **/build/outputs/*/connected/*
