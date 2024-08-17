@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.ksp)
     id("kotlin-parcelize")
+    id("jacoco")
 }
 
 android {
@@ -14,7 +15,7 @@ android {
     defaultConfig {
         applicationId = "com.jhoglas.pethelthcontrol"
         minSdk = 29
-        targetSdk = 34
+        targetSdk = compileSdk
         versionCode = 1
         versionName = "1.0"
 
@@ -89,5 +90,20 @@ dependencies {
     implementation(project(":data"))
     implementation(project(":domain"))
     implementation(project(":infrastructure"))
-
 }
+
+tasks.register<JacocoReport>("jacocoTestReport") {
+    dependsOn("testDebugUnitTest")
+
+    reports {
+        xml.required.set(true)
+        html.required.set(true)
+    }
+
+    sourceDirectories.setFrom(files("src/main/java"))
+    classDirectories.setFrom(files("build/intermediates/javac/debug/classes"))
+    executionData.setFrom(fileTree("build") {
+        include("jacoco/testDebugUnitTest.exec")
+    })
+}
+
