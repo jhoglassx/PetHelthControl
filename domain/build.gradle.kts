@@ -78,7 +78,7 @@ tasks.register("jacocoTestReport", JacocoReport::class) {
     val fileFilter = listOf("**/R.class", "**/R$*.class", "**/BuildConfig.*", "**/Manifest*.*", "**/*Test*.*")
 
     sourceDirectories.setFrom(files("$projectDir/src/main/java"))
-    classDirectories.setFrom(files("$buildDir/tmp/kotlin-classes/debug").map {
+    classDirectories.setFrom(files("${layout.buildDirectory.asFile}/tmp/kotlin-classes/debug").map {
         fileTree(it) {
             exclude(fileFilter)
         }
@@ -86,12 +86,8 @@ tasks.register("jacocoTestReport", JacocoReport::class) {
 
     executionData.setFrom(
         files(
-            "$buildDir/jacoco/testDebugUnitTest.exec",
-            "$buildDir/outputs/jacoco/connected/*coverage.ec"
+            "${layout.buildDirectory.asFile}/jacoco/testDebugUnitTest.exec",
+            "${layout.buildDirectory.asFile}/outputs/jacoco/connected/*coverage.ec"
         )
     )
-}
-
-tasks.named("check") {
-    dependsOn("jacocoTestReport")
 }

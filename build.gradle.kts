@@ -4,42 +4,4 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android) apply false
     alias(libs.plugins.android.library) apply false
     alias(libs.plugins.compose.compiler) apply false
-    id("jacoco")
-}
-
-jacoco {
-    toolVersion = "0.8.8"
-}
-
-subprojects {
-    tasks.withType<Test> {
-        useJUnitPlatform()
-
-        finalizedBy(tasks.named("jacocoTestReport"))
-    }
-}
-
-tasks.register("jacocoRootReport", JacocoReport::class) {
-
-    reports {
-        xml.required.set(true)
-        html.required.set(true)
-    }
-
-    val fileFilter = listOf("**/R.class", "**/R$*.class", "**/BuildConfig.*", "**/Manifest*.*", "**/*Test*.*")
-
-    subprojects.forEach { subproject ->
-        sourceDirectories.from(files("${subproject.projectDir}/src/main/java"))
-        classDirectories.from(files("${subproject.buildDir}/tmp/kotlin-classes/debug").map {
-            fileTree(it) {
-                exclude(fileFilter)
-            }
-        })
-        executionData.from(
-            fileTree(subproject.buildDir).include(
-                "jacoco/testDebugUnitTest.exec",
-                "outputs/code-coverage/connected/*coverage.ec"
-            )
-        )
-    }
 }

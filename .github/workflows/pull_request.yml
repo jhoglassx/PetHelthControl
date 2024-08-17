@@ -109,7 +109,7 @@ jobs:
   coverage-report:
     name: Coverage Report
     runs-on: ubuntu-latest
-    needs: [ instrumentation-tests, unit-tests ]
+    needs: [ instrumentation-tests]
 
     steps:
       - name: Checkout code
