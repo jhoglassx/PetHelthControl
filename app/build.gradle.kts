@@ -108,7 +108,6 @@ tasks.withType<Test> {
 }
 
 tasks.register("jacocoTestReport", JacocoReport::class) {
-    dependsOn("testDebugUnitTest", "createDebugCoverageReport")
 
     reports {
         xml.required.set(true)
