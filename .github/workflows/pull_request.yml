@@ -41,7 +41,7 @@ jobs:
           java-version: 17
           cache: 'gradle'
 
-      - name: Start Emulator
+      - name: Start Emulator and Run Tests
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: 33
@@ -49,6 +49,4 @@ jobs:
           arch: x86
           profile: Nexus 6
           emulator-options: '-no-snapshot-load -no-window -noaudio'
-
-      - name: Run Instrumented Tests
-        run: ./gradlew connectedCheck --stacktrace
+          script: ./gradlew connectedCheck --stacktrace
