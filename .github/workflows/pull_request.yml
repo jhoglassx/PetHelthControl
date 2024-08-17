@@ -44,10 +44,10 @@ jobs:
       - name: Start Emulator and Run Tests
         uses: reactivecircus/android-emulator-runner@v2
         with:
-          api-level: 29
+          api-level: 33
           target: google_apis
           arch: x86
           profile: Nexus 6
-          emulator-options: '-no-snapshot-load -no-window -noaudio -wipe-data'
+          emulator-options: '-no-snapshot-load -no-window -noaudio'
           disable-animations: true
           script: ./gradlew connectedCheck --stacktrace
