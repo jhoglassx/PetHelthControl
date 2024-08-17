@@ -69,12 +69,13 @@ jobs:
       - name: Run unit tests for infrastructure module
         run: ./gradlew :infrastructure:testDebug
 
-      - name: Upload unit Test Results
-        uses: actions/upload-artifact@v4
-        if: always()
+      - name: Save coverage data
+        uses: actions/upload-artifact@v3
         with:
-          name: test_results_${{ matrix.api-versions }}
-          path: '**/build/test-results/**/TEST-*.xml'
+          name: coverage-data
+          path: |
+            **/build/jacoco/*.exec
+            **/build/outputs/code-coverage/connected/*
 
   instrumentation-tests:
     name: Instrumentation Tests
@@ -106,15 +107,13 @@ jobs:
         env:
           API_LEVEL: 29
 
-      - name: Upload instrumentation test results
-        if: always()
-        uses: actions/upload-artifact@v4
+      - name: Save coverage data
+        uses: actions/upload-artifact@v3
         with:
-          name: test-results-${{ matrix.api-level }}-${{ steps.determine-target.outputs.TARGET }}-${{ matrix.shard }}
+          name: coverage-data
           path: |
-            **/build/reports/*
-            **/build/outputs/*/connected/*
-
+            **/build/jacoco/*.exec
+            **/build/outputs/code-coverage/connected/*
 
   coverage-unit-report:
     name: Coverage Unit Report
