@@ -8,7 +8,7 @@ env:
   JAVA_DISTRIBUTION: 'adopt'
   JAVA_VERSION: 21
   API_LEVEL: 29
-  COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS }}
+  COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
 
 jobs:
   build:
@@ -138,6 +138,6 @@ jobs:
         uses: coverallsapp/github-action@v1
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          coveralls-token: ${{ env.COVERALLS }}
+          coveralls-token: ${{ env.COVERALLS_REPO_TOKEN }}
         env:
-          COVERALLS_REPO_TOKEN: ${{ env.COVERALLS }}
+          COVERALLS_REPO_TOKEN: ${{ env.COVERALLS_REPO_TOKEN }}
