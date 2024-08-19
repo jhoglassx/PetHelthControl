@@ -135,9 +135,9 @@ jobs:
           path: build/reports/jacoco/jacocoRootReport/html/index.html
 
       - name: Upload coverage to Coveralls
-        uses: coverallsapp/github-action@v1
+        uses: coverallsapp/github-action@v2
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          coveralls-token: ${{ env.COVERALLS_REPO_TOKEN }}
+          path-to-lcov: ./build/reports/coverage/lcov-report/lcov.info
         env:
           COVERALLS_REPO_TOKEN: ${{ env.COVERALLS_REPO_TOKEN }}
