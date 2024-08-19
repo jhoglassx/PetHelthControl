@@ -1,8 +1,8 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.jetbrains.kotlin.android)
-    alias(libs.plugins.ksp)
     id("kotlin-parcelize")
+    id("jacoco")
 }
 
 android {
@@ -17,6 +17,9 @@ android {
     }
 
     buildTypes {
+        debug {
+            enableUnitTestCoverage = true
+        }
         release {
             isMinifyEnabled = false
             proguardFiles(
@@ -25,6 +28,16 @@ android {
             )
         }
     }
+
+    testOptions {
+        useLibrary("org.apache.http.legacy")
+        animationsDisabled = true
+        unitTests {
+            isIncludeAndroidResources = true
+            isReturnDefaultValues = true
+        }
+    }
+
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_21
@@ -60,4 +73,56 @@ dependencies {
     //Module
     implementation(project(":domain"))
     implementation(project(":infrastructure"))
+}
+
+jacoco {
+    toolVersion = "0.8.12"
+}
+
+tasks.withType<Test> {
+    extensions.configure<JacocoTaskExtension> {
+        isIncludeNoLocationClasses = false
+        excludes = listOf("jdk.internal.*")
+    }
+    finalizedBy(tasks.named("jacocoTestReport"))
+}
+
+tasks.register<JacocoReport>("jacocoTestReport") {
+    group = "reporting"
+    description = "Generate Jacoco code coverage report for unit tests"
+
+    dependsOn("testDebugUnitTest")
+
+    reports {
+        xml.required.set(true)
+        html.required.set(true)
+        csv.required.set(false)
+    }
+
+    val fileFilter = listOf("**/R.class", "**/R$*.class", "**/BuildConfig.*", "**/Manifest*.*", "**/*Test*.*")
+
+    val javaDebugTree = fileTree("${buildDir}/intermediates/javac/debug") {
+        exclude(fileFilter)
+    }
+    val kotlinDebugTree = fileTree("${buildDir}/tmp/kotlin-classes/debug") {
+        exclude(fileFilter)
+    }
+    val mainSrc = "${project.projectDir}/src/main/java"
+
+    sourceDirectories.setFrom(files(mainSrc))
+    classDirectories.setFrom(files(javaDebugTree, kotlinDebugTree))
+
+    executionData.from(fileTree(mapOf(
+        "dir" to "${buildDir}/outputs/unit_test_code_coverage/debugUnitTest",
+        "includes" to listOf("testDebugUnitTest.exec")
+    )))
+}
+
+tasks.register("testLocalReport") {
+    dependsOn("testDebugUnitTest")
+    dependsOn("jacocoTestReport")
+    group = "reporting"
+    doLast {
+        println("dir: ${buildDir}/reports/jacoco/jacocoTestReport/html/index.html")
+    }
 }
