@@ -53,11 +53,3 @@ tasks.register<JacocoReport>("jacocoRootReport") {
     }
     executionData.setFrom(files(allExecutionData))
 }
-
-tasks.register("testLocalReport") {
-    dependsOn("jacocoRootReport")
-    group = "reporting"
-    doLast {
-        println("Combined report available at: ${buildDir}/reports/jacoco/jacocoRootReport/html/index.html")
-    }
-}

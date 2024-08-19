@@ -115,12 +115,3 @@ tasks.register<JacocoReport>("jacocoTestReport") {
         "includes" to listOf("testDebugUnitTest.exec")
     )))
 }
-
-tasks.register("testLocalReport") {
-    dependsOn("testDebugUnitTest")
-    dependsOn("jacocoTestReport")
-    group = "reporting"
-    doLast {
-        println("dir: ${buildDir}/reports/jacoco/jacocoTestReport/html/index.html")
-    }
-}
