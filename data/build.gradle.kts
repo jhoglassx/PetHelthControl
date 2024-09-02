@@ -91,10 +91,15 @@ tasks.register<JacocoReport>("jacocoTestReport") {
     group = "reporting"
     description = "Generate Jacoco code coverage report for unit tests"
 
+    val reportXmlPath = "$buildDir/reports/jacoco/test/jacocoTestReport.xml"
+    val reportHtmlPath = "$buildDir/reports/jacoco/jacocoHtml"
+
     reports {
-        xml.required.set(true)
-        html.required.set(true)
-        csv.required.set(false)
+        xml.required = true
+        xml.outputLocation = file(reportXmlPath)
+        html.required = true
+        html.outputLocation = file(reportHtmlPath)
+        csv.required = false
     }
 
     val fileFilter = listOf("**/R.class", "**/R$*.class", "**/BuildConfig.*", "**/Manifest*.*", "**/*Test*.*")

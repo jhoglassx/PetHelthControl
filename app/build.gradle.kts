@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.compose.compiler)
     id("kotlin-parcelize")
     id("jacoco")
+    id("com.github.nbaztec.coveralls-jacoco") version "1.2.20"
 }
 
 android {
@@ -118,36 +119,48 @@ tasks.withType<Test> {
     finalizedBy(tasks.named("jacocoTestReport"))
 }
 
-tasks.register<JacocoReport>("jacocoTestReport") {
-    group = "reporting"
-    description = "Generate Jacoco code coverage report for unit tests"
+tasks {
+    register<JacocoReport>("jacocoTestReport") {
+        group = "reporting"
+        description = "Generate Jacoco code coverage report for unit tests"
 
-    reports {
-        xml.required.set(true)
-        html.required.set(true)
-        csv.required.set(false)
+        val reportXmlPath = "$buildDir/reports/jacoco/test/jacocoTestReport.xml"
+        val reportHtmlPath = "$buildDir/reports/jacoco/jacocoHtml"
+
+        reports {
+            xml.required = true
+            xml.outputLocation = file(reportXmlPath)
+            html.required = true
+            html.outputLocation = file(reportHtmlPath)
+            csv.required = false
+        }
+
+        val fileFilter = listOf("**/R.class", "**/R$*.class", "**/BuildConfig.*", "**/Manifest*.*", "**/*Test*.*")
+
+        val javaDebugTree = fileTree("${buildDir}/intermediates/javac/debug") {
+            exclude(fileFilter)
+        }
+        val kotlinDebugTree = fileTree("${buildDir}/tmp/kotlin-classes/debug") {
+            exclude(fileFilter)
+        }
+        val mainSrc = "${project.projectDir}/src/main/java"
+
+        sourceDirectories.setFrom(files(mainSrc))
+        classDirectories.setFrom(files(javaDebugTree, kotlinDebugTree))
+
+        executionData.setFrom(fileTree(mapOf(
+            "dir" to "${buildDir}/outputs/code_coverage/debugAndroidTest/connected",
+            "includes" to listOf("**/*.ec")
+        )))
+
+        executionData.from(fileTree(mapOf(
+            "dir" to "${buildDir}/outputs/unit_test_code_coverage/debugUnitTest",
+            "includes" to listOf("testDebugUnitTest.exec")
+        )))
+
+        coverallsJacoco {
+            reportPath = "$buildDir/reports/jacoco/jacocoTestReport.xml"
+            reportSourceSets = files("${project.projectDir}/src/main/java")
+        }
     }
-
-    val fileFilter = listOf("**/R.class", "**/R$*.class", "**/BuildConfig.*", "**/Manifest*.*", "**/*Test*.*")
-
-    val javaDebugTree = fileTree("${buildDir}/intermediates/javac/debug") {
-        exclude(fileFilter)
-    }
-    val kotlinDebugTree = fileTree("${buildDir}/tmp/kotlin-classes/debug") {
-        exclude(fileFilter)
-    }
-    val mainSrc = "${project.projectDir}/src/main/java"
-
-    sourceDirectories.setFrom(files(mainSrc))
-    classDirectories.setFrom(files(javaDebugTree, kotlinDebugTree))
-
-    executionData.setFrom(fileTree(mapOf(
-        "dir" to "${buildDir}/outputs/code_coverage/debugAndroidTest/connected",
-        "includes" to listOf("**/*.ec")
-    )))
-
-    executionData.from(fileTree(mapOf(
-        "dir" to "${buildDir}/outputs/unit_test_code_coverage/debugUnitTest",
-        "includes" to listOf("testDebugUnitTest.exec")
-    )))
 }

@@ -1,6 +1,3 @@
-import org.gradle.plugin.coveralls.jacoco.CoverallsReporter
-
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
 plugins {
     alias(libs.plugins.android.application) apply false
     alias(libs.plugins.jetbrains.kotlin.android) apply false
@@ -8,6 +5,12 @@ plugins {
     alias(libs.plugins.compose.compiler) apply false
     id("jacoco")
     id("com.github.nbaztec.coveralls-jacoco") version "1.2.20"
+}
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
 }
 
 tasks {
@@ -28,13 +31,15 @@ tasks {
         }
 
         // Define o caminho onde o relatório XML será salvo
-        val reportXmlPath = "$buildDir/reports/jacoco/jacocoRootReport/jacocoRootReport.xml"
+        val reportXmlPath = "$buildDir/reports/jacoco/test/jacocoRootReport.xml"
+        val reportHtmlPath = "$buildDir/reports/jacoco/jacocoHtml"
 
         reports {
-            xml.required.set(true)
+            xml.required = true
             xml.outputLocation = file(reportXmlPath)
-            html.required.set(true)
-            csv.required.set(false)
+            html.required = true
+            html.outputLocation = file(reportHtmlPath)
+            csv.required = false
         }
 
         val fileFilter = listOf(
